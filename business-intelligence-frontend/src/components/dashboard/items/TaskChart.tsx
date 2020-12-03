@@ -3,7 +3,7 @@ import { makeStyles, useTheme } from '@material-ui/core/styles';
 import { LineChart, Line, XAxis, YAxis, Label, ResponsiveContainer, Legend, Tooltip } from 'recharts';
 import { Menu, Typography, MenuItem, InputLabel, FormHelperText, FormControl, Select } from '@material-ui/core';
 import { Task } from '../../../api/graphql/user.api';
-import { AfterDate, BaseTaskVars, GET_TASK_AFTER_DATE } from '../../../api/graphql/task.api'
+import { WithDate, BaseTaskVars, GET_TASK_WITH_DATE } from '../../../api/graphql/task.api'
 import { useQuery } from '@apollo/client';
 import { setDateHandler } from '../../../util/date.util';
 import { aggregateTasks } from '../../../util/aggregation.util';
@@ -19,17 +19,6 @@ const  createData = (date: string, completed: number, notCompleted: number) => {
     return { date, completed, notCompleted };
   }
 
-const testData = [
-    createData('00:00', 100, 120),
-    createData('03:00', 300, 232),
-    createData('06:00', 600, 452),
-    createData('09:00', 800, 452),
-    createData('12:00', 1500, 56),
-    createData('15:00', 2000, 200),
-    createData('18:00', 2400, 500),
-    createData('21:00', 2400, 200),
-    createData('24:00', 200, 100),
-  ];
 
   interface Props {
     tasks: Task[] | undefined
@@ -39,6 +28,7 @@ const testData = [
     Daily = 'DAILY',
     Weekly = 'WEEKLY',
     Monthly = 'MONTHLY',
+    Last_Month = 'LAST_MONTH'
   }
 
 export const TaskChart: React.FC<Props> = (props) =>{
@@ -49,9 +39,11 @@ export const TaskChart: React.FC<Props> = (props) =>{
   const [dateString, setDateString] = useState<string>(setDateHandler(dateMetric))
   const [aggregatedData, setAggregatedData] = useState<any[]>([])
 
-  const {loading, data, error, refetch} = useQuery<AfterDate, BaseTaskVars>(
-    GET_TASK_AFTER_DATE, 
-    {variables: {userId: "1", date: dateString}}
+  console.log(dateString)
+
+  const {loading, data, error, refetch} = useQuery<WithDate, BaseTaskVars>(
+    GET_TASK_WITH_DATE, 
+    {variables: {userId: "1", date: dateString, isAfter: (dateMetric !== DateMetric.Last_Month)}}
 )
 
 const handleChange = (event: React.ChangeEvent<{value: unknown}>) =>{
@@ -68,7 +60,7 @@ useEffect(() =>{
 useEffect(() =>{
   //ever
   if(!loading && data){
-    const aggregatedData: Object = aggregateTasks(data.getTasksAfterDate)
+    const aggregatedData: Object = aggregateTasks(data.getTasksWithDate)
     console.log(aggregatedData)
     const mappedDataTasks = Object.entries(aggregatedData).map(entry =>{
       return createData(entry[0], entry[1].completed, entry[1].notCompleted)
@@ -78,6 +70,8 @@ useEffect(() =>{
   }  
 }, [data])
 
+
+console.log(data)
 
 if(loading){
   return <div>Loading...</div>
@@ -122,8 +116,9 @@ if(loading){
           onChange={handleChange}
         >
           <MenuItem value={DateMetric.Daily}>Daily</MenuItem>
-          <MenuItem value={DateMetric.Weekly}>Weekly</MenuItem>
-          <MenuItem value={DateMetric.Monthly}>Monthly</MenuItem>
+          <MenuItem value={DateMetric.Weekly}>This Week</MenuItem>
+          <MenuItem value={DateMetric.Monthly}>This Month</MenuItem>
+          <MenuItem value={DateMetric.Last_Month}>Last Month</MenuItem>
         </Select>
         </div>
     </>

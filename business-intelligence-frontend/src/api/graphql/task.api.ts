@@ -2,7 +2,8 @@ import { gql } from "@apollo/client";
 
 export interface BaseTaskVars {
     userId: string,
-    date: string
+    date: string,
+    isAfter: boolean
 }
 
 export enum ITaskTypes {
@@ -34,17 +35,17 @@ export interface BaseTask {
     expirationDate: string 
 }
 
-export interface AfterDate {
-    getTasksAfterDate: BaseTask[]
+export interface WithDate {
+    getTasksWithDate: BaseTask[]
 }
 
 export interface RelevantTasksResult {
   getRelevantTasks: TableTask[]
 }
 
-export const GET_TASK_AFTER_DATE = gql`
-  query getTasksAfterDate($userId: String!, $date: String!) {
-    getTasksAfterDate(userId: $userId, date: $date){
+export const GET_TASK_WITH_DATE = gql`
+  query getTasksWithDate($userId: String!, $date: String!, $isAfter: Boolean!) {
+    getTasksWithDate(userId: $userId, date: $date, isAfter: $isAfter){
     id
     completedAt
     taskCreatedAt

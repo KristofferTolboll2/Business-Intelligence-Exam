@@ -46,8 +46,6 @@ export const Home: React.FC = (props: Props) => {
       history.push('/dashboard')
     }
 
-  
-
     console.log(sessionContext)
 
 

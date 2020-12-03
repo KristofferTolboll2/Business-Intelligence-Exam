@@ -8,11 +8,19 @@ export const getDaysAhead = (days: number): string => {
     return convertToIsoFormat(daysAhead);
 }
 
+export const getDaysBehind = (days: number): string =>{
+    let daysBehind: Date = new Date();
+    daysBehind.setDate(daysBehind.getDate() - days)
+    console.log(daysBehind)
+    return convertToIsoFormat(daysBehind);
+}
+
 export const convertToIsoFormat = (date: Date): string =>{
     return date.toISOString().slice(0, 21);
 }
 
 export const setDateHandler = (type: DateMetric): string =>{
+    console.log(type)
     switch(type) {
         case DateMetric.Daily:
              return getDaysAhead(1)
@@ -20,6 +28,8 @@ export const setDateHandler = (type: DateMetric): string =>{
             return getDaysAhead(7)
         case DateMetric.Monthly:
             return getDaysAhead(30)
+        case DateMetric.Last_Month:
+            return getDaysBehind(30)
     }
 }
 

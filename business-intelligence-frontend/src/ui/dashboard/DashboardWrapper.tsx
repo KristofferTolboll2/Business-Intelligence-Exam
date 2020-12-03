@@ -1,6 +1,6 @@
 import React from 'react'
 import { useQuery } from '@apollo/client'
-import { Typography } from '@material-ui/core'
+import { Fab, Popover, Typography } from '@material-ui/core'
 import { BaseUser, BaseUserVars, GET_DASHBOARD_USER } from '../../api/graphql/user.api'
 import clsx from 'clsx';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -20,6 +20,9 @@ import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import { useStyles } from './useDashboardStyles'
 import { mainListItems, secondaryListItems } from './listItems';
+import { Add } from '@material-ui/icons';
+import { BaseModal } from '../BaseModal';
+import { ChatModal } from '../chat/ChatModal';
 
 
 interface Props {
@@ -29,6 +32,7 @@ interface Props {
 export const DashboardWrapper = (props: Props) => {
     
   const [open, setOpen] = React.useState<boolean>(false);
+  const [showChat, setShowChat] = React.useState<boolean>(false);
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -43,7 +47,14 @@ export const DashboardWrapper = (props: Props) => {
 
   
   return (
+    <>
+      <ChatModal isOpen={showChat} handleClose={() => setShowChat(false)} />
         <div className={classes.root}>
+          <div style={{position: "fixed", right: 0, bottom: 0}} >
+          <Fab color="primary" aria-label="add" onClick={() => setShowChat(!showChat)}>
+        <Add />
+        </Fab>
+        </div>
         <CssBaseline />
      <AppBar position="absolute" className={clsx(classes.appBar, open && classes.appBarShift)}>
        <Toolbar className={classes.toolbar}>
@@ -88,6 +99,8 @@ export const DashboardWrapper = (props: Props) => {
         {props.children}
         </main>
      </div>
+
+     </>
      
     )
 }
