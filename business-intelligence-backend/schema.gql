@@ -40,7 +40,7 @@ type Query {
   userWithTasks(id: String!): User!
   getTasksByUserId(userId: String!): [Task!]!
   getInitialTasks(userId: String!): [Task!]!
-  getTasksAfterDate(date: String!, userId: String!): [Task!]!
+  getTasksWithDate(isAfter: Boolean!, date: String!, userId: String!): [Task!]!
   getRelevantTasks(input: GetRelevantTasksInput!): [Task!]!
 }
 

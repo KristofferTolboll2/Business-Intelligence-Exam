@@ -45,11 +45,14 @@ export class TaskResolver {
     }
 
     @Query(() => [Task])
-    async getTasksAfterDate(@Args("userId") userId: string, @Args("date") date: string): Promise<Task[]> {
+    async getTasksWithDate(@Args("userId") userId: string, @Args("date") date: string, @Args("isAfter") isAfter: boolean): Promise<Task[]> {
         const parsedDate = new Date(Date.parse(date));
         console.log(parsedDate)
-        const tasks: Task[] = await this.taskService.getTasksAfterDate(Number(userId), parsedDate);
-        return tasks;
+        if(isAfter){
+            return await this.taskService.getTasksAfterDate(Number(userId), parsedDate);
+        }else{
+            return await this.taskService.getTasksBeforeDate(Number(userId), parsedDate);
+        }
     }
 
     @Query(() => [Task])

@@ -63,6 +63,19 @@ export class TaskService {
         return tasks;
     }
 
+    async getTasksBeforeDate(userId: number,  beforeDate: Date){
+        const tasks = await this.taskRepository.createQueryBuilder("task")
+        .where("task.user = :userId", {userId})
+        .andWhere(
+            `"task"."expirationDate"
+            BETWEEN :begin 
+                AND :end`,
+                {begin: beforeDate.toISOString(), end: new Date().toISOString()}
+        ).getMany()
+        return tasks;
+    }
+
+
     async getMostRelevantTasks(userId: number, limit: number){
         const tasks = await this.taskRepository.createQueryBuilder("task")
         .where("task.userId =:userId", {userId})

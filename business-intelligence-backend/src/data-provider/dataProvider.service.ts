@@ -22,15 +22,13 @@ export class DataProviderService{
         return response.data
     }
 
-    async createQuestions({offset = 0,  limit = 10}: {offset: number, limit: number}){
+    async createQuestions({offset = 0,  limit = 100}: {offset: number, limit: number}){
 
         const {data, description} = await this.getColumns();
    
-
         const cachedQuestionEntries = await this.getQuestions(description);
-        console.log(`they are ${cachedQuestionEntries} `)
+    
         if(!cachedQuestionEntries){
-        console.log('nothing')
         const questionEntries = data.map(entry => ({question: entry[0], answerOptions: this.encodeAnswerOptions(entry[2]?.original_labels)}))
         this.saveQuestions(questionEntries, description.name)
         return questionEntries.slice(offset, limit);

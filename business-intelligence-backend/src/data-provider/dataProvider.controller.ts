@@ -20,10 +20,11 @@ export class DataProviderController {
     @Get('questions')
     async getQuestions( @Query('offset') offset: number, @Query('limit') limit: number){
         try{
-            
             const questions = await this.dataProviderService.createQuestions({offset, limit});
+            console.log(questions)
             return questions;
         } catch(error){
+            console.error(error.message)
             throw new HttpException(error.message, HttpStatus.BAD_REQUEST)
         }
     }
