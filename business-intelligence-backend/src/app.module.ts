@@ -11,6 +11,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { DataProviderModule } from './data-provider/dataProvider.module';
 import { RedisModule} from 'nestjs-redis'
 import { url } from 'inspector';
+import { StoryboardModule } from './storyboard/storyboard.module';
  
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { url } from 'inspector';
   DataProviderModule,
   TaskModule,
   UserModule,
+  StoryboardModule,
   TypeOrmModule.forRootAsync({
     useFactory: () =>({
     type: 'postgres',
