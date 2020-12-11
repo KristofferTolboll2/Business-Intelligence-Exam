@@ -8,6 +8,7 @@ import { Insights } from './components/insights/Insights'
 import { useSessionContext } from './context/SessionContext'
 import { ProtectedRoute, ProtectedRouteProps } from './ProtectedRoute'
 import { Navbar } from './ui/Navbar'
+import { Storyboard } from './components/storyboard/Storyboard'
 
 interface Props {
     
@@ -46,6 +47,7 @@ export const RoutingHandler: React.FC = (props: Props) => {
         <Switch>
         <ProtectedRoute {...defaultProtectedRouteProps} path="/dashboard" component={Dashboard} />
         <ProtectedRoute {...defaultProtectedRouteProps} path="/insights" component={Insights} />
+        <ProtectedRoute {...defaultProtectedRouteProps} path="/storyboard" component={Storyboard} />
         {!defaultProtectedRouteProps.isAuthenticated &&
         <>
         <Route path="/home" component={Home} />

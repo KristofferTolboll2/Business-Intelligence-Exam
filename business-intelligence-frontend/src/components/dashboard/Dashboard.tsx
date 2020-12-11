@@ -12,12 +12,10 @@ import { DashboardWrapper } from '../../ui/dashboard/DashboardWrapper';
 import { ContainerWrapper } from '../../ui/dashboard/ContainerWrapper';
 import { TaskTable } from './items/task-table/TaskTable';
 import { TaskRecommendation } from './items/task-recommendations/TaskRecommendation';
+
 interface Props {
     
 }
-
-
-
 
 
 export const Dashboard: React.FC<Props> = (props: Props) => {

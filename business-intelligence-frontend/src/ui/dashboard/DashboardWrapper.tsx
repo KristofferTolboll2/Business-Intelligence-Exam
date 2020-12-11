@@ -1,20 +1,15 @@
 import React from 'react'
 import { useQuery } from '@apollo/client'
 import { Fab, Popover, Typography } from '@material-ui/core'
-import { BaseUser, BaseUserVars, GET_DASHBOARD_USER } from '../../api/graphql/user.api'
 import clsx from 'clsx';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Drawer from '@material-ui/core/Drawer';
-import Box from '@material-ui/core/Box';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import List from '@material-ui/core/List';
 import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
 import Badge from '@material-ui/core/Badge';
-import Container from '@material-ui/core/Container';
-import Grid from '@material-ui/core/Grid';
-import Paper from '@material-ui/core/Paper';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import NotificationsIcon from '@material-ui/icons/Notifications';
@@ -29,7 +24,7 @@ interface Props {
     children: React.ReactElement
 }
 
-export const DashboardWrapper = (props: Props) => {
+export const DashboardWrapper: React.FC<Props> = (props: Props) => {
     
   const [open, setOpen] = React.useState<boolean>(false);
   const [showChat, setShowChat] = React.useState<boolean>(false);

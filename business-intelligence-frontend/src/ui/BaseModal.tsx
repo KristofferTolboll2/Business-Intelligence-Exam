@@ -5,12 +5,14 @@ interface Props {
     isOpen: boolean,
     children: React.ReactElement
     handleClose: () => void
+    isFullscreeen?: boolean
 }
 
 export const BaseModal: React.FC<Props> = (props: Props) => {
-    const { isOpen, handleClose } = props
+    const { isOpen, handleClose, isFullscreeen } = props
+
     return (
-        <Dialog open={isOpen} onClose={handleClose}>
+        <Dialog fullScreen={isFullscreeen} open={isOpen} onClose={handleClose}>
             {props.children}
         </Dialog>
     )

@@ -4,7 +4,6 @@ import { ContainerWrapper } from '../../ui/dashboard/ContainerWrapper'
 import { DashboardWrapper } from '../../ui/dashboard/DashboardWrapper'
 import { useStyles } from '../../ui/dashboard/useDashboardStyles'
 import clsx from 'clsx';
-import { Link } from 'react-router-dom'
 import { WorkplaceSurvey } from './surveys/workplace-survey/WorkplaceSurevey'
 
 interface Props {
