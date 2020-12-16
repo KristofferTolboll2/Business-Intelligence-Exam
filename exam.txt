@@ -1,0 +1,5 @@
+Here is my github repo for the exam project 
+
+https://github.com/KristofferTolboll2/Business-Intelligence-Exam
+
+It contains a detailed description of the project in the README.md file. 
