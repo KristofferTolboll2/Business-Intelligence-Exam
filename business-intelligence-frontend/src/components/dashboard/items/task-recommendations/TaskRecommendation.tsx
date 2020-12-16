@@ -12,6 +12,9 @@ import SendIcon from '@material-ui/icons/Send';
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 import StarBorder from '@material-ui/icons/StarBorder';
+import { getSurveyAnswer } from '../../../../api/http/survey.api';
+import useAxios from 'axios-hooks';
+import { AddTask } from '../task-table/AddTask';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -30,61 +33,74 @@ interface Props {
     
 }
 
-
+interface Task {
+  title: string
+  description: string
+}
 
 
 export const TaskRecommendation: React.FC<Props> = (props: Props) => {
     const classes = useStyles();
     const [open, setOpen] = useState<boolean>(false);
-    let data: null | any = {data: "test"};
-    
-    if(!data){
-        return <div>Start answering services for us to help you with tasks</div>
+    const [isOpenModal, setOpenModal] = useState<boolean>(false);
+    const [selectedTask, setSelectedTask] = useState<Task>({title: "", description: ""});
+
+    const [{data, loading, error}, refetch] = useAxios(getSurveyAnswer(1));
+
+    if(loading){
+      return <div>loading...</div>
+    }
+
+    if(error){
+      return <div>Something went wrong</div>
+    }
+
+    const onSetTask = (task: Task) =>{
+      setSelectedTask(task)
+      setOpenModal(true);
     }
 
     const handleClick = () =>{
         setOpen(!open);
     }
 
+    console.log(selectedTask)
+
+
+    const tasks = data.map((entry: Task) =>{
+      return (
+        <ListItem button className={classes.nested} onClick={() => onSetTask(entry)}>
+            <ListItemIcon>
+              <StarBorder />
+            </ListItemIcon>
+            <ListItemText primary={entry.title} />
+          </ListItem>
+      )
+    })
     return (
         <div>
+          <AddTask isOpen={isOpenModal} handleClose={() => setOpenModal(false)} refetch={() =>{}} title={selectedTask.title} description={selectedTask.description} />
     <List
         component="nav"
       aria-labelledby="nested-list-subheader"
+
       subheader={
-        <ListSubheader component="div" id="nested-list-subheader">
+        <ListSubheader component="div" id="nested-list-subheader"  style={{zIndex: 1000, backgroundColor: 'white', marginBottom: '10px', overflow: 'auto'}} >     
           Task recommendation
         </ListSubheader>
       }
       className={classes.root}
     >
-      <ListItem button>
-        <ListItemIcon>
-          <SendIcon />
-        </ListItemIcon>
-        <ListItemText primary="Sent mail" />
-      </ListItem>
-      <ListItem button>
-        <ListItemIcon>
-          <DraftsIcon />
-        </ListItemIcon>
-        <ListItemText primary="Drafts" />
-      </ListItem>
       <ListItem button onClick={handleClick}>
         <ListItemIcon>
           <InboxIcon />
         </ListItemIcon>
-        <ListItemText primary="Inbox" />
+        <ListItemText primary="Recommendations" />
         {open ? <ExpandLess /> : <ExpandMore />}
       </ListItem>
       <Collapse in={open} timeout="auto" unmountOnExit>
         <List component="div" disablePadding>
-          <ListItem button className={classes.nested}>
-            <ListItemIcon>
-              <StarBorder />
-            </ListItemIcon>
-            <ListItemText primary="Starred" />
-          </ListItem>
+          {tasks}
         </List>
       </Collapse>
     </List> 

@@ -1,4 +1,4 @@
-import React, { useCallback, useContext } from 'react'
+import React, { useCallback, useContext, useEffect } from 'react'
 import { BaseModal } from '../../../../ui/BaseModal'
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -12,6 +12,7 @@ import moment from 'moment'
 import { useMutation } from '@apollo/client';
 import { CircularProgress } from '@material-ui/core';
 import { SessionContext } from '../../../../context/SessionContext';
+import { Title } from '@material-ui/icons';
 
 enum ErrorTypes {
     DUPLICATE_TITLE,
@@ -21,20 +22,26 @@ interface Props {
     isOpen: boolean
     handleClose: () => void
     refetch: () => void
+    title?: string,
+    description?: string
 }
 
 export const AddTask = (props: Props) => {
-    const {isOpen, handleClose, refetch} = props
+    const {isOpen, handleClose, refetch, title, description} = props
+    
     
     const defaultDate = moment().add(3, 'h').format("YYYY-MM-DDTHH:MM")
-    console.log(defaultDate)
+    console.log(title)
+    console.log(description)
 
     //extract user id from sessioncontext
     const [{id}] = useContext(SessionContext);
     const [showError, setShowError] = React.useState<boolean>(false);
 
     const [createTask, {loading: createTaskLoading, error: createTaskError}] = useMutation(CREATE_TASK);
-    const { register, handleSubmit } = useForm<CreateTaskInput>();
+    const { register, handleSubmit, setValue, reset } = useForm<CreateTaskInput>({
+        defaultValues: {title: title, description: description}
+    });
     const onSubmit = useCallback((formValues: CreateTaskInput) =>{
         const parsedDate: string = new Date(formValues.expirationDate).toISOString();
         console.log(parsedDate)
@@ -49,6 +56,15 @@ export const AddTask = (props: Props) => {
             setShowError(true)
         })   
     }, [])
+
+    useEffect(() =>{
+        if(title && description){
+            reset({
+                title: title, 
+                description: description
+            })
+        }
+    }, [title, description])
 
     console.log(id)
    

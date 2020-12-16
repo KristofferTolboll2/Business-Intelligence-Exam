@@ -4,6 +4,10 @@ import axios from 'axios'
 import { RedisService } from 'nestjs-redis';
 import { TernaryAnswerOptions, BinaryAnswerOptions } from './dto/AnswerOptions'
 import { promisify } from 'util'
+import { InjectRepository } from "@nestjs/typeorm";
+import { DataProvider } from "./dataProvider.entity";
+import { Repository } from "typeorm";
+import { User } from "src/user/user.entity";
 
 interface Question {
     question: string, answerOptions: any[]
@@ -11,10 +15,26 @@ interface Question {
 
 @Injectable()
 export class DataProviderService{
-    constructor(private readonly httpService: HttpService,
+    constructor(
+        @InjectRepository(DataProvider)
+                private readonly dataProviderRepository: Repository<DataProvider>,
+        @InjectRepository(User)
+                private readonly userRepository: Repository<User>,
+        private readonly httpService: HttpService,
                 private readonly configService: ConfigService,
-                private readonly redisService: RedisService){}
+                private readonly redisService: RedisService
+    ){}
 
+
+    async getSurveyAnswer(userId: number): Promise<DataProvider>{
+        try{
+            const user: User = await this.userRepository.findOne({id: userId});
+            console.log(user.dataProvider)
+            return user.dataProvider
+        }catch(error){
+            throw error
+        }
+    }
 
     async getColumns(){
         const flaskUrl: string = this.configService.get<string>('FLASK_SERVER_URL');
@@ -70,6 +90,7 @@ export class DataProviderService{
 
 
 
+
     private encodeAnswerOptions(answerOptions: any[]){
         if((answerOptions.includes(1) && answerOptions.includes(2) && answerOptions.includes(3)) || 
             ( (answerOptions.includes("Yes") && answerOptions.includes("No") && ((answerOptions.includes("Maybe") || answerOptions.includes("I don't know") 
@@ -79,6 +100,46 @@ export class DataProviderService{
             return BinaryAnswerOptions
         }
         return answerOptions
-}
+    }
+
+    private decodeAnswerOptions(answerOptions: any[], questionResponses: any[]){
+        const parsedAnswers =  answerOptions.map(answer =>{
+               const expectedAnswer = parseInt(answer)
+               if(isNaN(expectedAnswer)){
+                return 1
+               }
+                return expectedAnswer
+        })
+        return  questionResponses.map((entry, index) =>{
+            return [entry[1], parsedAnswers[index]]
+        })
+    }
+
+    private toDataObject(decodedAnswers: any[]){
+        let obj = {}
+        decodedAnswers.map((entry, index) =>{
+            const key = entry[0]
+            const value = entry[1]
+            obj[key] = value
+        })
+        return obj
+    }
+
+    async submitSurvey(answers: any){
+        const flaskUrl: string = this.configService.get<string>('FLASK_SERVER_URL');
+        const questionResponse = await (await axios.get(`${flaskUrl}/columns`)).data
+        const decodedAnswersOptions: any[] = this.decodeAnswerOptions(answers, questionResponse.data);
+        const dataObject = this.toDataObject(decodedAnswersOptions);
+        const response = await this.httpService.post(`${flaskUrl}/predict`, dataObject).toPromise();
+        const { prediction } = response.data
+        const user = await this.userRepository.findOne({id: 1});
+        const dataProviderEntity = new DataProvider({
+            surveyPrediction: prediction[0]
+        })
+        user.dataProvider = dataProviderEntity;
+        user.save()
+        console.log(prediction)
+        return response.data;
+    }
 
 }

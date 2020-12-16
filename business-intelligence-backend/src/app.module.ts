@@ -12,6 +12,7 @@ import { DataProviderModule } from './data-provider/dataProvider.module';
 import { RedisModule} from 'nestjs-redis'
 import { url } from 'inspector';
 import { StoryboardModule } from './storyboard/storyboard.module';
+import { DataProvider } from './data-provider/dataProvider.entity';
  
 @Module({
   imports: [
@@ -22,19 +23,20 @@ import { StoryboardModule } from './storyboard/storyboard.module';
       dateScalarMode: 'isoDate'
     }
   }),
-  DataProviderModule,
+
   TaskModule,
   UserModule,
   StoryboardModule,
+  DataProviderModule,
   TypeOrmModule.forRootAsync({
     useFactory: () =>({
     type: 'postgres',
     host: 'localhost',
     port: 5432,
-    username: 'lpadmin',
+    username: 'postgres',
     database: 'postgres',
-    password: 'secretsauce',
-    entities: [User, Task],
+    password: '',
+    entities: [User, Task, DataProvider],
     synchronize: true
     })
   }),

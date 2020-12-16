@@ -1,15 +1,20 @@
 import { Button, DialogContent, DialogTitle } from '@material-ui/core';
 import useAxios from 'axios-hooks';
 import React, { useEffect, useState } from 'react'
-import { getQuestions } from '../../../../api/http/survey.api';
+import { getQuestions, submitSurvey } from '../../../../api/http/survey.api';
 import { BaseModal } from '../../../../ui/BaseModal'
 import { Question } from '../workplace-survey/Question';
 import { GetStarted } from './GetStarted';
 import { Pagination } from '@material-ui/lab';
+import axios from 'axios';
 
 interface Props {
     isOpen: boolean
     handleClose: () => void
+}
+
+interface PredictionResponse {
+    prediction: number[]
 }
 
 export const WorkplaceSurvey: React.FC<Props> = (props: Props) => {
@@ -68,6 +73,20 @@ export const WorkplaceSurvey: React.FC<Props> = (props: Props) => {
         return <div>Someting went wrong..</div>
     }
 
+
+    const submitHandler = async (e: React.MouseEvent<HTMLElement>) =>{
+        e.preventDefault()
+        console.log(selectedValues)
+        const response = await axios.post(submitSurvey(), selectedValues);
+        console.log(response.data)
+        if(response.status === 201){
+        alert('Thank you for your submission')
+        handleClose()
+        }else{
+            alert('Something went wrong please try again')
+        }
+    }
+
    
 
     console.log(questions)
@@ -92,9 +111,8 @@ export const WorkplaceSurvey: React.FC<Props> = (props: Props) => {
             {(selectedValues.length === data.length && !selectedValues.includes(undefined))
             && 
             <div style={{padding: '0.5rem', display: 'flex', justifyContent: 'center'}}>
-            <Button variant="contained" color="primary">Submit </Button>
+            <Button variant="contained" color="primary" onClick={(e) => submitHandler(e)}>Submit </Button>
             </div>}
-
 
             </div>
             :

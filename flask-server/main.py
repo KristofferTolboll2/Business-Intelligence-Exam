@@ -37,8 +37,8 @@ because everything is a list.
 def get_column_data():
     description_order = {
         'name': 'workplace',
-        'firstElement': 'original column names',
-        'secondElement': 'mapped column name',
+        'firstElement': 'mapped column names',
+        'secondElement': 'original column names',
         'thirdElement': 'unique data values'
     }
     print(type(column_data))

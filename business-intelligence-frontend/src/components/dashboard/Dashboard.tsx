@@ -51,6 +51,12 @@ export const Dashboard: React.FC<Props> = (props: Props) => {
               </Paper>
             </Grid>
 
+            {/* Task recommendations*/}
+            <Grid item xs={12} md={4} lg={3}>
+              <Paper className={fixedHeightPaper}>
+                <TaskRecommendation />
+              </Paper>
+            </Grid>
     
 
             {/* Task overview */}
