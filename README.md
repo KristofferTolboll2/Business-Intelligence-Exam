@@ -1,4 +1,53 @@
 This is the README.md file, that will describe my business intelligence project, and a walkthrough of each of the studypoint solution assignments.
+
+## Setup application
+
+### Backend
+
+To run the backend run the following steps
+
+<ol>
+<li> npm install </li>
+<li> <b> $ yarn start:dev </b> (for debug mode) or <b>yarn start </b></li>
+<li>Remeber to start the backend before the frontend otherwise they will both start on port 3000 </li>
+</ol>
+
+<br />
+<br />
+
+### Frontend
+To run the application move into the `business-intelligence-frontend` folder and run the 
+<br />```$ npm install``` command.  This should install the nescessary dependencies to run the project. 
+Afterwards you should be able to run the frontend using the ```npm start ``` command, and a new browser window should open with the application.
+
+<b>Troubleshooting! </b> <br />
+An error might occur similar to this one 
+
+![Frontend Issue](Frontend-Issue.png)
+
+If this occurs do the following 
+
+<ol>
+<li>Delete the file called <b>tsconfig.json</b> from the folder </li>
+<li> run the following command <b> $ yarn </b> </li> 
+<li> Rerun <b> $ npm start </b> </li>
+</ol>
+<br />
+
+### Notebooks and flask server
+
+The notebooks can be opened in jupyter lab, and contains full documentation about the content
+
+To the start the flask server
+
+
+First run ```$ pip install requirements.txt ``` or  ```$ pip3 install requirements.txt ``` depending on your pip version, (this requries you to setup a virtual enviroment first).
+
+You can then run the server by typing ``` python main.py ``` or ```python3 main.py ``` 
+
+
+
+
 ## Business Case Foundation.
 For this assignment I wanted to explore the capabilities of creating a technology-driven process for analyzing data and delivering user feedback for mental health.
 I thought mental health was an interesting business case, because Mental Health is a very modern topic after the Covid pandemic in 2019.
@@ -10,6 +59,7 @@ Above is an illustration of the complete architecture of the application.
 This dataset is used as the baseline for the project. I thought mental health in the workplace would be a very essential starting point for this application.
 The dataset only contained around 1500 entries, but it contained a lot of columns <i>(features)</i>, and this is very different from what I'm used to working with.
 Previously I have mostly worked with larger datasets, with only a few features. As it is also present in the notebook, this required a lot more </i>preprocessing</i>, and a lot more <i>Hyper Parameter Optimization</i> to get the model giving a good predictions
+<br />
 <li>
 The Jupyter notebook is pretty well documented, but i want to put in a few words of how I wanted to design the structure of the notebook.
 <br />
@@ -27,19 +77,28 @@ indicating how many neighbors we want to research.
 We then append them fit the model based on each neighbor index and return the scores and plot them in <i>matplotlib </i>
 To see the different scores
 </li>
+<br />
 <li>
 I have also created a flask server, which is used to create prediction, and retrieve the columns, this is done by storing the model and the columns into a <i>pickle</i> file stored in the <i>models</i> folder.
 This enables up to send the columns to the backend server, where it can present the columns (also referred to as features in ML context).
 Using this pattern we can create a two way communication from our flask server to our actual backend. We can use a <i>GET </i> request to retrieve the columns, while we can use a <i>POST </i> request to "post" a rating to the backend where the prediction is sent back.
 I chose this all through the backend server and not directly from the client.
 </li>
+<br />
 <li>
 Furthermore I also implemented a Redis cache, to store the questions to decrease redundancy in the application. This was to mimic a real life application a bit more.
  
 In Business Intelligence we also want to optimize for performance so we provide our end-users with the best possible user experience. Therefore I created a <i>Redis </i> cache, so all the questions that are retrieved from the Flask server (in this case it is the mental health columns), we want to save them for the next user, that has to fetch them.
  
 </ol>
- 
+
+
+## Features of the system
+
+For this application i have create a lot of features
+
+
+
  
 ## Alternative solutions
  
@@ -72,6 +131,7 @@ Cons:
 <li>Costs. Tableau and other BI-tools have licensing fees, which can be expensive in many cases. Especially for start-ups and smaller enterprises with a small budget
 </ul>
 <br />
+
 ## Learning Points
  
 As my intention was to create an actual software application, which encapsulated a lot of logic, I decided to use React as the Frontend for this. React has a lot of visualization tools, which are open source, but it still required a lot of effort to make the implementations.
