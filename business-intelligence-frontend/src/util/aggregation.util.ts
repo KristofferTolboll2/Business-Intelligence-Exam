@@ -1,6 +1,9 @@
 import { BaseTask } from '../api/graphql/task.api';
 import moment, { Moment } from 'moment'
 
+type Genericobject = {
+    [key: string]: any
+}
 
 export const aggregateTasks = (tasks: BaseTask[]) =>{
         
@@ -35,4 +38,8 @@ export const sortDateArray = (arr: BaseTask[]) =>{
      console.log(moment(b.expirationDate).unix())
      return moment(a.expirationDate).unix() - moment(b.expirationDate).unix()
  })   
+}
+
+export const isObjectEmpty = (obj: Genericobject) =>{
+    return Object.keys(obj).length === 0 && obj.constructor === Object
 }

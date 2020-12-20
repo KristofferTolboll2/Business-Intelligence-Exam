@@ -28,8 +28,9 @@ export class DataProviderService{
 
     async getSurveyAnswer(userId: number): Promise<DataProvider>{
         try{
+            console.log(userId)
             const user: User = await this.userRepository.findOne({id: userId});
-            console.log(user.dataProvider)
+            console.log(user)
             return user.dataProvider
         }catch(error){
             throw error

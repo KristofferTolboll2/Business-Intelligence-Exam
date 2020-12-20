@@ -35,7 +35,7 @@ import { DataProvider } from './data-provider/dataProvider.entity';
     port: 5432,
     username: 'postgres',
     database: 'postgres',
-    password: '',
+    password: 'Magnumsniper123',
     entities: [User, Task, DataProvider],
     synchronize: true
     })

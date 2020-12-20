@@ -5,10 +5,14 @@ import { DashboardWrapper } from '../../ui/dashboard/DashboardWrapper'
 import { useStyles } from '../../ui/dashboard/useDashboardStyles'
 import clsx from 'clsx';
 import { WorkplaceSurvey } from './surveys/workplace-survey/WorkplaceSurevey'
+import { InsightView } from './InsightView'
+import { InsightPlot } from './InsightPlot'
 
 interface Props {
     
 }
+
+
 
 
 const data = null
@@ -36,11 +40,7 @@ export const Insights: React.FC<Props> = (props: Props) => {
             {/* Description */}
             <Grid item xs={12} md={8} lg={8}>
               <Paper className={fixedHeightPaper}>
-                <div>
-                    To get more insight in your mental health, 
-                    answer some questions about yourself. 
-                
-                </div>
+                <InsightView />
               </Paper>
             </Grid>
             {/* */}
@@ -63,11 +63,8 @@ export const Insights: React.FC<Props> = (props: Props) => {
             {/* */}
             <Grid item xs={12} md={12} lg={12}>
               
-              <Paper className={fixedHeightPaper}>
-                <div>
-                    {data === null &&
-                    <p>No surveys answered yet</p>}
-                </div>
+              <Paper>
+                <InsightPlot />
               </Paper>
             </Grid>
 

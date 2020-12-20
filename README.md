@@ -95,7 +95,11 @@ In Business Intelligence we also want to optimize for performance so we provide 
 
 ## Features of the system
 
-For this application i have create a lot of features
+For this application i have create a lot of features. To match the cirriculum of the course i wanted to integrate both <b><i>OLAP and OLTP </i></b>  functionlity into this applcation. <br />
+This was achieved in to parts. First i created the business-intelligence-backend service, which is responsible for the <i>OLTP</i> of htis sytem. Here users can create and manage daily tasks, in order ot help them keep track of their daily rutines, as well as see their progress on previous tasks. Then we use <i>OLTP</i> to create surveys to help give the users feedback on which tasks are best suited for them. This is achieved in the <i>flask-server</i>, which uses our <i>Random Forrest Classifier </i> to create a prediction on rather the user has a mental illness or not. 
+<br />
+<br />
+This business aspect of this feature is recommending certain tasks for users, that may have an mental illness, and other tasks for people who have not been classified as having a mental illness. 
 
 
 

@@ -48,9 +48,9 @@ export const ChatModal: React.FC<Props> = (props: Props) => {
         setContent("")
     }
 
-    const messageComponents = messages.map(message =>{
+    const messageComponents = messages.map((message, index) =>{
         const {isUser, content} = message
-        return <Message isUser={isUser} content={content} />
+        return <Message key={index} isUser={isUser} content={content} />
     })
     return (
         <BaseModal isOpen={isOpen} handleClose={handleClose}>

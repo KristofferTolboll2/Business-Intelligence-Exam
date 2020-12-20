@@ -40,6 +40,11 @@ export class DataProviderController {
     }
     }
 
+    @Get('prediction/:userId')
+    async getSurveyPrediction(@Param('userId') userId: number): Promise<DataProvider>{
+        return await this.dataProviderService.getSurveyAnswer(userId);
+    }
+
 
     @Get('questions')
     async getQuestions( @Query('offset') offset: number, @Query('limit') limit: number){
@@ -64,4 +69,5 @@ export class DataProviderController {
 
         }
     }
+
 }

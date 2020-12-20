@@ -15,6 +15,7 @@ import StarBorder from '@material-ui/icons/StarBorder';
 import { getSurveyAnswer } from '../../../../api/http/survey.api';
 import useAxios from 'axios-hooks';
 import { AddTask } from '../task-table/AddTask';
+import { isObjectEmpty } from '../../../../util/aggregation.util';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -66,10 +67,17 @@ export const TaskRecommendation: React.FC<Props> = (props: Props) => {
 
     console.log(selectedTask)
 
+    if(isObjectEmpty(data)){
+      return <div>
+          Complete survveys before we can recommend a task for you
+        </div>
+    }
 
-    const tasks = data.map((entry: Task) =>{
+    console.log(data)
+    
+    const tasks = !isObjectEmpty(data) && data.map((entry: Task, index: number) =>{
       return (
-        <ListItem button className={classes.nested} onClick={() => onSetTask(entry)}>
+        <ListItem key={entry.title + index} button className={classes.nested} onClick={() => onSetTask(entry)}>
             <ListItemIcon>
               <StarBorder />
             </ListItemIcon>

@@ -8,3 +8,5 @@ export const getQuestions = () => (`${BASE_URL}/${SURVEY_NAMESPACE}/questions`)
 export const submitSurvey = () => (`${BASE_URL}/${SURVEY_NAMESPACE}/submit`)
 
 export const getSurveyAnswer = (userId: number) => (`${BASE_URL}/${SURVEY_NAMESPACE}/survey/${userId}`)
+
+export const getSurveyPreidction = (userId: number) => (`${BASE_URL}/${SURVEY_NAMESPACE}/prediction/${userId}`)

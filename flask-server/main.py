@@ -1,9 +1,16 @@
 # This is a sample Python script.
 import os
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, Response
 import pandas as pd
 import joblib
+from flask_cors import CORS, cross_origin
 from util import read_json_file, clean_data_columns
+from graph_genration import generate_graph, User
+from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
+import io
+import matplotlib.pyplot as plt
+import base64
+import uuid
 import json
 from sklearn.metrics import accuracy_score
 import sklearn
@@ -22,6 +29,8 @@ column_data_file_name = f'{data_dir}/column_data.json'
 PORT = 5000
 
 app = Flask(__name__)
+cors = CORS(app)
+app.config['CORS_HEADERS'] = 'Content-Type'
 
 @app.route('/', methods=['GET'])
 def hello_world():
@@ -43,6 +52,22 @@ def get_column_data():
     }
     print(type(column_data))
     return jsonify({'data': column_data, 'description': description_order})
+
+
+@app.route('/plot', methods=['POST'])
+def create_graph():
+    _json = request.json
+    print(_json)
+    income = _json.get('income')
+    mental_health_level = _json.get('mental')
+    membership_days = _json.get('membership')
+    user = User(1, mental_health_level, membership_days, income)
+    fig = generate_graph(user)
+    output = io.BytesIO()
+    plt.savefig(output, format='png')
+    output.seek(0)
+    pic_hash = base64.b64encode(output.read()).decode("utf-8")
+    return jsonify({'image': pic_hash})
 
 
 @app.route('/predict', methods=['POST'])

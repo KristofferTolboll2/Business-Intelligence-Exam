@@ -19,7 +19,7 @@ export const RoutingHandler: React.FC = (props: Props) => {
     const location = useLocation()
     
     const [sessionContext, updateSessionContext] = useSessionContext()
-    console.log(location)
+    console.log(sessionContext)
 
     const setRedirectPathOnAuthentication = (path: string) =>{
         console.log(path)
